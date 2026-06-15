@@ -12,8 +12,7 @@ Le CRUD complet est implemente : **C**reate, **R**ead, **U**pdate, **D**elete.
 - Frontend : HTML + CSS + JavaScript vanilla
 - Templates : moteur de templates Django (cote serveur).
 - Base de donnees : SQLite (incluse, aucune configuration requise).
-- **Aucun systeme de login / authentification** n'est ajoute a l'application.
-- **Aucun emoji** n'est utilise dans tout le projet.
+
 
 ## Structure des dossiers
 
