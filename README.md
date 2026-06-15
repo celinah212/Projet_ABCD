@@ -94,6 +94,8 @@ gestion_produits/                  # racine du projet (contient manage.py)
 4. Appliquer les migrations pour creer la base de donnees :
    ```
    python manage.py migrate
+   python manage.py makemigrations produits
+   python manage.py migrate
    ```
 
 5. (Optionnel) Generer des donnees de demonstration :
