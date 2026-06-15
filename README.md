@@ -9,8 +9,7 @@ Le CRUD complet est implemente : **C**reate, **R**ead, **U**pdate, **D**elete.
 ## Choix techniques
 
 - Backend : Django (Python), architecture MVT.
-- Frontend : HTML + CSS + **JavaScript vanilla uniquement** (pas de TypeScript,
-  pas de TSX, pas de JSX, aucun framework JS).
+- Frontend : HTML + CSS + JavaScript vanilla
 - Templates : moteur de templates Django (cote serveur).
 - Base de donnees : SQLite (incluse, aucune configuration requise).
 - **Aucun systeme de login / authentification** n'est ajoute a l'application.
