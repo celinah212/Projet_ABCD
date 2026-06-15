@@ -1,0 +1,25 @@
+{% extends 'produits/base.html' %}
+
+{% block title %}Supprimer le produit{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Supprimer le produit</h1>
+</div>
+
+<div class="confirm-card">
+    <p class="confirm-text">
+        Voulez-vous vraiment supprimer le produit
+        <strong>{{ produit.nom }}</strong> ?
+    </p>
+    <p class="muted">Cette action est irreversible.</p>
+
+    <form method="post" id="delete-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <a href="{% url 'produits:detail_produit' produit.id %}" class="btn btn-ghost">Annuler</a>
+            <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

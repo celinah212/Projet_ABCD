@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestion des produits{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="{% url 'produits:liste_produits' %}" class="brand">
+                <span class="brand-mark">GP</span>
+                <span class="brand-text">Gestion des produits</span>
+            </a>
+            <nav class="main-nav">
+                <a href="{% url 'produits:liste_produits' %}" class="nav-link">Produits</a>
+                <a href="{% url 'produits:nouveau_produit' %}" class="btn btn-primary btn-sm">Nouveau produit</a>
+
+                <div class="dropdown" id="settings-dropdown">
+                    <button
+                        type="button"
+                        class="btn btn-secondary btn-sm dropdown-toggle"
+                        id="settings-button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        Parametres
+                    </button>
+                    <div class="dropdown-menu" role="menu" aria-labelledby="settings-button">
+                        <div class="dropdown-section">
+                            <span class="dropdown-label">Theme</span>
+                            <button type="button" class="dropdown-item dropdown-item-toggle" id="theme-toggle">
+                                <span id="theme-label">Activer le mode sombre</span>
+                            </button>
+                        </div>
+
+                        <div class="dropdown-section">
+                            <a href="{% url 'produits:gerer_categories' %}" class="dropdown-item">
+                                Gerer les categories
+                            </a>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-section">
+                            <form method="post" action="{% url 'produits:vider_base' %}" id="wipe-form">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item dropdown-item-danger">
+                                    Vider toute la base de donnees
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-section">
+                            <button type="button" class="dropdown-item" id="about-button">
+                                A propos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Modale A propos -->
+    <div class="modal-backdrop" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="about-title">A propos du projet</h2>
+                <button type="button" class="modal-close" id="about-close" aria-label="Fermer">x</button>
+            </div>
+            <div class="modal-body">
+                <section class="about-section">
+                    <h3>Objet du projet</h3>
+                    <p>
+                        Cette application est un systeme complet de gestion de produits
+                        qui implemente les quatre operations fondamentales (creation, lecture,
+                        modification et suppression) sur des articles references en base de
+                        donnees. Elle permet a un utilisateur de maintenir un catalogue
+                        structure par categories, de suivre l'etat du stock et la valeur
+                        globale des produits.
+                    </p>
+                </section>
+
+                <section class="about-section">
+                    <h3>Architecture technique</h3>
+                    <p>
+                        Le backend est construit avec le framework Django en suivant son
+                        architecture MVT (Model - View - Template), une variante du modele
+                        MVC adaptee a Django. Le modele decrit les donnees, la vue traite la
+                        logique metier, et le template s'occupe du rendu HTML cote serveur.
+                    </p>
+                </section>
+
+                <section class="about-section">
+                    <h3>Frontend</h3>
+                    <p>
+                        Le frontend est entierement realise en HTML, CSS et JavaScript
+                        standard. Aucune librairie, aucun framework et aucune precompilation
+                        ne sont utilises : pas de TypeScript, pas de TSX, pas de JSX. Le
+                        code JavaScript ajoute des interactions telles que la recherche
+                        instantanee, la bascule du theme clair/sombre et la confirmation
+                        des operations sensibles.
+                    </p>
+                </section>
+
+                <section class="about-section">
+                    <h3>Donnees et stockage</h3>
+                    <p>
+                        La base de donnees utilisee par defaut est SQLite, qui ne necessite
+                        aucune installation supplementaire. Deux modeles sont definis :
+                        Categorie (pour structurer le catalogue) et Produit (nom,
+                        description, prix, quantite, disponibilite, dates de creation et
+                        de modification).
+                    </p>
+                </section>
+
+                <section class="about-section">
+                    <h3>Fonctionnalites cles</h3>
+                    <ul>
+                        <li>Liste des produits avec recherche par nom et filtre par categorie.</li>
+                        <li>Fiche detaillee pour chaque produit.</li>
+                        <li>Formulaires de creation et de modification avec validation serveur.</li>
+                        <li>Suppression d'un produit avec double confirmation.</li>
+                        <li>Bascule entre mode clair et mode sombre, memorisee localement.</li>
+                        <li>Option de reinitialisation complete de la base de donnees.</li>
+                    </ul>
+                </section>
+
+                <section class="about-section">
+                    <h3>Perimetre</h3>
+                    <p>
+                        L'application n'integre aucun systeme d'authentification : elle est
+                        destinee a un usage local, mono-utilisateur, a des fins pedagogiques
+                        ou de demonstration.
+                    </p>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="about-close-footer">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="container main-content">
+        {% if messages %}
+        <div class="messages" id="messages">
+            {% for message in messages %}
+            <div class="message message-{{ message.tags|default:'info' }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Application de gestion de produits - Architecture MVT Django</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript vanilla uniquement (pas de TypeScript ni de JSX) -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

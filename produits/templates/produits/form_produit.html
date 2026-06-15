@@ -1,0 +1,71 @@
+{% extends 'produits/base.html' %}
+
+{% block title %}{{ titre }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ titre }}</h1>
+        {% if produit %}
+        <p class="muted">Produit : {{ produit.nom }}</p>
+        {% else %}
+        <p class="muted">Renseignez les informations du nouveau produit.</p>
+        {% endif %}
+    </div>
+    <a href="{% url 'produits:liste_produits' %}" class="btn btn-ghost">Retour a la liste</a>
+</div>
+
+<div class="form-card">
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="message message-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.nom.id_for_label }}">Nom <span class="req">*</span></label>
+                {{ form.nom }}
+                {% if form.nom.errors %}<div class="field-error">{{ form.nom.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.categorie.id_for_label }}">Categorie</label>
+                {{ form.categorie }}
+                {% if form.categorie.errors %}<div class="field-error">{{ form.categorie.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            {% if form.description.errors %}<div class="field-error">{{ form.description.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.prix.id_for_label }}">Prix (Ariary) <span class="req">*</span></label>
+                {{ form.prix }}
+                {% if form.prix.errors %}<div class="field-error">{{ form.prix.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.quantite.id_for_label }}">Quantite</label>
+                {{ form.quantite }}
+                {% if form.quantite.errors %}<div class="field-error">{{ form.quantite.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group form-check-group">
+            <label class="form-check">
+                {{ form.disponible }}
+                <span>Produit disponible a la vente</span>
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'produits:liste_produits' %}" class="btn btn-ghost">Annuler</a>
+            <button type="submit" class="btn btn-primary">{{ bouton }}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'produits/base.html' %}
+{% load produits_tags %}
+
+{% block title %}Liste des produits{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Produits</h1>
+        <p class="muted">{{ total }} produit(s) trouve(s)</p>
+    </div>
+    <a href="{% url 'produits:nouveau_produit' %}" class="btn btn-primary">Ajouter un produit</a>
+</div>
+
+<form method="get" class="filters" id="search-form">
+    <div class="field">
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            id="search-input"
+            class="form-control"
+            placeholder="Rechercher par nom..."
+            autocomplete="off"
+        >
+    </div>
+    <div class="field">
+        <select name="categorie" id="categorie-select" class="form-control">
+            <option value="">Toutes les categories</option>
+            {% for c in categories %}
+            <option value="{{ c.id }}" {% if categorie_selectionnee == c.id|stringformat:"s" %}selected{% endif %}>
+                {{ c.nom }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-secondary">Filtrer</button>
+    {% if query or categorie_selectionnee %}
+    <a href="{% url 'produits:liste_produits' %}" class="btn btn-ghost">Reinitialiser</a>
+    {% endif %}
+</form>
+
+<div class="table-card">
+    {% if produits %}
+    <div class="table-wrapper">
+        <table class="data-table" id="produits-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Categorie</th>
+                    <th class="num">Prix</th>
+                    <th class="num">Quantite</th>
+                    <th>Statut</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in produits %}
+                <tr data-name="{{ p.nom|lower }}">
+                    <td>
+                        <a href="{% url 'produits:detail_produit' p.id %}" class="link-strong">{{ p.nom }}</a>
+                    </td>
+                    <td>{{ p.categorie|default:"-" }}</td>
+                    <td class="num">{{ p.prix }} Ariary</td>
+                    <td class="num">{{ p.quantite }}</td>
+                    <td>
+                        {% if p.disponible %}
+                        <span class="badge badge-success">Disponible</span>
+                        {% else %}
+                        <span class="badge badge-muted">Indisponible</span>
+                        {% endif %}
+                    </td>
+                    <td class="actions">
+                        <a href="{% url 'produits:modifier_produit' p.id %}" class="btn btn-secondary btn-sm">Modifier</a>
+                        <a href="{% url 'produits:supprimer_produit' p.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include "produits/partials/pagination.html" %}
+    {% else %}
+    <div class="empty-state">
+        <h3>Aucun produit</h3>
+        <p>Aucun produit ne correspond a votre recherche ou la base est vide.</p>
+        <a href="{% url 'produits:nouveau_produit' %}" class="btn btn-primary">Ajouter un produit</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Pagination des produits">
+    <div class="pagination-info">
+        Page <strong>{{ page_obj.number }}</strong> sur {{ page_obj.paginator.num_pages }}
+        &middot; {{ page_obj.paginator.count }} produit{{ page_obj.paginator.count|pluralize }}
+    </div>
+
+    <ul class="pagination-list">
+        {# Bouton "Precedent" #}
+        <li>
+            {% if page_obj.has_previous %}
+            <a href="?{% url_replace request 'page' page_obj.previous_page_number %}" class="page-link">Precedent</a>
+            {% else %}
+            <span class="page-link page-disabled">Precedent</span>
+            {% endif %}
+        </li>
+
+        {# Numeros de page avec points de suspension #}
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+            <li><span class="page-link page-current">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+            <li>
+                <a href="?{% url_replace request 'page' num %}" class="page-link">{{ num }}</a>
+            </li>
+            {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+            <li><span class="page-link page-ellipsis">...</span></li>
+            {% endif %}
+        {% endfor %}
+
+        {# Bouton "Suivant" #}
+        <li>
+            {% if page_obj.has_next %}
+            <a href="?{% url_replace request 'page' page_obj.next_page_number %}" class="page-link">Suivant</a>
+            {% else %}
+            <span class="page-link page-disabled">Suivant</span>
+            {% endif %}
+        </li>
+    </ul>
+</nav>
+{% endif %}

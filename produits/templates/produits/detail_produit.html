@@ -1,0 +1,63 @@
+{% extends 'produits/base.html' %}
+
+{% block title %}{{ produit.nom }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ produit.nom }}</h1>
+        <p class="muted">Categorie : {{ produit.categorie|default:"Non defini" }}</p>
+    </div>
+    <a href="{% url 'produits:liste_produits' %}" class="btn btn-ghost">Retour a la liste</a>
+</div>
+
+<div class="detail-card">
+    <dl class="detail-grid">
+        <div class="detail-item">
+            <dt>Description</dt>
+            <dd>{{ produit.description|default:"Aucune description fournie."|linebreaksbr }}</dd>
+        </div>
+        <div class="detail-row">
+            <div class="detail-item">
+                <dt>Prix unitaire</dt>
+                <dd class="price">{{ produit.prix }} Ariary</dd>
+            </div>
+            <div class="detail-item">
+                <dt>Quantite en stock</dt>
+                <dd>{{ produit.quantite }}</dd>
+            </div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-item">
+                <dt>Valeur du stock</dt>
+                <dd>{{ produit.valeur_stock }} Ariary</dd>
+            </div>
+            <div class="detail-item">
+                <dt>Disponibilite</dt>
+                <dd>
+                    {% if produit.disponible %}
+                    <span class="badge badge-success">Disponible</span>
+                    {% else %}
+                    <span class="badge badge-muted">Indisponible</span>
+                    {% endif %}
+                </dd>
+            </div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-item">
+                <dt>Cree le</dt>
+                <dd>{{ produit.date_creation|date:"d/m/Y H:i" }}</dd>
+            </div>
+            <div class="detail-item">
+                <dt>Modifie le</dt>
+                <dd>{{ produit.date_modification|date:"d/m/Y H:i" }}</dd>
+            </div>
+        </div>
+    </dl>
+
+    <div class="form-actions">
+        <a href="{% url 'produits:modifier_produit' produit.id %}" class="btn btn-secondary">Modifier</a>
+        <a href="{% url 'produits:supprimer_produit' produit.id %}" class="btn btn-danger">Supprimer</a>
+    </div>
+</div>
+{% endblock %}
